@@ -4,7 +4,8 @@ ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
 WORKDIR /app
 RUN addgroup --system app && adduser --system --ingroup app app
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN python -m pip install --no-cache-dir --upgrade pip==26.1.2 && \
+    python -m pip install --no-cache-dir -r requirements.txt
 COPY . .
 RUN mkdir -p uploads && chown -R app:app /app
 USER app

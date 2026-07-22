@@ -1,0 +1,21 @@
+<header class="topbar">
+  <div class="topbar-start">
+    <button class="icon-button mobile-menu-button" id="menuToggle" type="button" aria-label="Abrir menu" aria-controls="sidebar" aria-expanded="false">
+      <i class="bi bi-list" aria-hidden="true"></i>
+    </button>
+    <div class="topbar-context">
+      <span class="topbar-kicker">Marketing responsável</span>
+      <strong>{{ app_name }}</strong>
+    </div>
+  </div>
+  <div class="topbar-actions">
+    {% if simulation_mode %}
+      <span class="environment-badge" title="Integrações externas estão em modo de simulação" aria-label="Modo simulação: integrações externas desativadas">
+        <span class="status-pulse" aria-hidden="true"></span><span class="environment-label-full">Modo simulação</span><span class="environment-label-short" aria-hidden="true">Simulação</span>
+      </span>
+    {% endif %}
+    <a class="icon-button" href="/configuracoes" aria-label="Abrir configurações" title="Configurações">
+      <i class="bi bi-gear" aria-hidden="true"></i>
+    </a>
+  </div>
+</header>

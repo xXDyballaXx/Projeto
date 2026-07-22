@@ -1,2 +1,19 @@
-{% extends "base.html" %}{% block public_content %}<div class="legal-page"><a class="brand text-dark" href="/"><span class="brand-mark">D</span> Divulgaí IA</a><h1>Termos de Uso</h1><p>Versão de demonstração — personalize com orientação jurídica antes da operação comercial.</p><h2>Uso permitido</h2><p>O usuário deve utilizar apenas contatos com autorização válida, contas empresariais e APIs oficiais, respeitando políticas da Meta e a legislação aplicável.</p><h2>Uso proibido</h2><p>É proibido fazer scraping, usar listas compradas, contornar limites, automatizar contas pessoais ou enviar spam.</p><h2>Responsabilidades</h2><p>A empresa usuária é responsável pela origem da base, prova do consentimento, conteúdo e configuração das integrações.</p><a href="/">Voltar ao início</a></div>{% endblock %}
-
+{% extends "base.html" %}
+{% block title %}Termos de Uso · {{ app_name }}{% endblock %}
+{% block public_content %}
+<div class="legal-shell">
+  <nav class="legal-topbar"><a class="brand" href="/" aria-label="Divulgaí IA — Início"><span class="brand-mark" aria-hidden="true"><i class="bi bi-stars"></i></span><span class="brand-copy">Divulgaí <b>IA</b></span></a></nav>
+  <article class="legal-page" id="public-content" tabindex="-1" data-reveal="up">
+    <span class="eyebrow">Uso responsável</span>
+    <h1>Termos de Uso</h1>
+    <p class="legal-notice"><i class="bi bi-info-circle" aria-hidden="true"></i> Versão de demonstração — personalize com orientação jurídica antes da operação comercial.</p>
+    <h2>Uso permitido</h2>
+    <p>O usuário deve utilizar apenas contatos com autorização válida, contas empresariais e APIs oficiais, respeitando políticas da Meta e a legislação aplicável.</p>
+    <h2>Uso proibido</h2>
+    <p>É proibido fazer scraping, usar listas compradas, contornar limites, automatizar contas pessoais ou enviar spam.</p>
+    <h2>Responsabilidades</h2>
+    <p>A empresa usuária é responsável pela origem da base, prova do consentimento, conteúdo e configuração das integrações.</p>
+    <a class="btn btn-outline-secondary mt-3" href="/"><i class="bi bi-arrow-left" aria-hidden="true"></i> Voltar ao início</a>
+  </article>
+</div>
+{% endblock %}

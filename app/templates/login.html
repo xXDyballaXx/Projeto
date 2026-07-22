@@ -1,2 +1,32 @@
-{% extends "base.html" %}{% block public_content %}<div class="auth-page"><div class="auth-card"><a class="brand text-dark" href="/"><span class="brand-mark">D</span> Divulgaí IA</a><h1>Bem-vindo de volta</h1><p class="text-muted">Acesse sua central de campanhas.</p><form id="loginForm" class="vstack gap-3"><div><label class="form-label">E-mail</label><input class="form-control" name="email" type="email" required autocomplete="email"></div><div><label class="form-label">Senha</label><input class="form-control" name="password" type="password" required autocomplete="current-password"></div><button class="btn btn-primary btn-lg" type="submit">Entrar</button><button class="btn btn-link" type="button" id="forgotPassword">Esqueci minha senha</button></form><hr><p class="text-center mb-0">Ainda não tem conta? <a href="/cadastro">Cadastre-se</a></p></div></div>{% endblock %}
-
+{% extends "base.html" %}
+{% block title %}Entrar · {{ app_name }}{% endblock %}
+{% block public_content %}
+<div class="auth-page">
+  <section class="auth-form-side" id="public-content" tabindex="-1">
+    <div class="auth-card" data-reveal="up">
+      <a class="brand" href="/" aria-label="Divulgaí IA — Início"><span class="brand-mark" aria-hidden="true"><i class="bi bi-stars"></i></span><span class="brand-copy">Divulgaí <b>IA</b></span></a>
+      <h1>Bem-vindo de volta</h1>
+      <p>Acesse sua central de campanhas e continue de onde parou.</p>
+      <form id="loginForm" class="vstack gap-3" novalidate>
+        <div><label class="form-label" for="loginEmail">E-mail</label><input class="form-control" id="loginEmail" name="email" type="email" required autocomplete="email" placeholder="voce@empresa.com"></div>
+        <div><div class="d-flex justify-content-between align-items-center"><label class="form-label" for="loginPassword">Senha</label><button class="btn btn-link btn-sm p-0 min-h-0" type="button" id="forgotPassword">Esqueci minha senha</button></div><input class="form-control" id="loginPassword" name="password" type="password" required autocomplete="current-password" placeholder="Digite sua senha"></div>
+        <button class="btn btn-primary btn-lg w-100" type="submit"><span>Entrar na plataforma</span><i class="bi bi-arrow-right" aria-hidden="true"></i></button>
+      </form>
+      <div class="auth-divider">Primeiro acesso</div>
+      <p class="text-center mb-0">Ainda não tem conta? <a href="/cadastro">Crie sua conta</a></p>
+    </div>
+  </section>
+  <aside class="auth-showcase" aria-label="Benefícios da plataforma">
+    <div class="auth-showcase-content" data-reveal="right">
+      <span class="eyebrow">Sua operação em um só lugar</span>
+      <h2>Clareza para criar. Controle para crescer.</h2>
+      <p>Organize campanhas, acompanhe resultados e mantenha cada decisão importante sob controle da sua equipe.</p>
+      <div class="auth-benefits">
+        <span class="auth-benefit"><i class="bi bi-shield-check" aria-hidden="true"></i> Consentimento e auditoria incorporados</span>
+        <span class="auth-benefit"><i class="bi bi-stars" aria-hidden="true"></i> IA sempre sujeita à revisão humana</span>
+        <span class="auth-benefit"><i class="bi bi-diagram-3" aria-hidden="true"></i> Canais oficiais conectados com segurança</span>
+      </div>
+    </div>
+  </aside>
+</div>
+{% endblock %}

@@ -1,2 +1,36 @@
-{% extends "base.html" %}{% block public_content %}<div class="auth-page"><div class="auth-card wide"><a class="brand text-dark" href="/"><span class="brand-mark">D</span> Divulgaí IA</a><h1>Crie sua conta</h1><p class="text-muted">Comece com uma operação organizada e responsável.</p><form id="registerForm" class="row g-3"><div class="col-md-6"><label class="form-label">Seu nome</label><input class="form-control" name="name" required minlength="2"></div><div class="col-md-6"><label class="form-label">Empresa</label><input class="form-control" name="company_name" required minlength="2"></div><div class="col-12"><label class="form-label">E-mail</label><input class="form-control" name="email" type="email" required></div><div class="col-md-6"><label class="form-label">Senha</label><input class="form-control" name="password" type="password" required minlength="8"></div><div class="col-md-6"><label class="form-label">Confirmar senha</label><input class="form-control" name="password_confirmation" type="password" required minlength="8"></div><div class="col-12 form-check ms-2"><input class="form-check-input" name="accept_terms" type="checkbox" id="terms" required><label class="form-check-label" for="terms">Aceito os <a href="/termos">termos</a> e a <a href="/privacidade">política de privacidade</a>.</label></div><div class="col-12"><button class="btn btn-primary btn-lg w-100">Criar conta</button></div></form><hr><p class="text-center mb-0">Já tem conta? <a href="/login">Entrar</a></p></div></div>{% endblock %}
-
+{% extends "base.html" %}
+{% block title %}Criar conta · {{ app_name }}{% endblock %}
+{% block public_content %}
+<div class="auth-page">
+  <section class="auth-form-side" id="public-content" tabindex="-1">
+    <div class="auth-card wide" data-reveal="up">
+      <a class="brand" href="/" aria-label="Divulgaí IA — Início"><span class="brand-mark" aria-hidden="true"><i class="bi bi-stars"></i></span><span class="brand-copy">Divulgaí <b>IA</b></span></a>
+      <h1>Crie sua conta</h1>
+      <p>Comece com uma operação de marketing organizada e responsável.</p>
+      <form id="registerForm" class="row g-3" novalidate>
+        <div class="col-md-6"><label class="form-label" for="registerName">Seu nome</label><input class="form-control" id="registerName" name="name" required minlength="2" autocomplete="name" placeholder="Como devemos chamar você?"></div>
+        <div class="col-md-6"><label class="form-label" for="registerCompany">Empresa</label><input class="form-control" id="registerCompany" name="company_name" required minlength="2" autocomplete="organization" placeholder="Nome da sua empresa"></div>
+        <div class="col-12"><label class="form-label" for="registerEmail">E-mail profissional</label><input class="form-control" id="registerEmail" name="email" type="email" required autocomplete="email" placeholder="voce@empresa.com"></div>
+        <div class="col-md-6"><label class="form-label" for="registerPassword">Senha</label><input class="form-control" id="registerPassword" name="password" type="password" required minlength="8" autocomplete="new-password" placeholder="Mínimo de 8 caracteres" aria-describedby="registerPasswordHint"><p class="password-note" id="registerPasswordHint">Use letras e números para proteger sua conta.</p></div>
+        <div class="col-md-6"><label class="form-label" for="registerPasswordConfirmation">Confirmar senha</label><input class="form-control" id="registerPasswordConfirmation" name="password_confirmation" type="password" required minlength="8" autocomplete="new-password" placeholder="Repita sua senha"></div>
+        <div class="col-12"><div class="form-check"><input class="form-check-input" name="accept_terms" type="checkbox" id="terms" required><label class="form-check-label" for="terms">Li e aceito os <a href="/termos">termos de uso</a> e a <a href="/privacidade">política de privacidade</a>.</label></div></div>
+        <div class="col-12"><button class="btn btn-primary btn-lg w-100" type="submit"><span>Criar minha conta</span><i class="bi bi-arrow-right" aria-hidden="true"></i></button></div>
+      </form>
+      <div class="auth-divider">Já utiliza a plataforma?</div>
+      <p class="text-center mb-0">Já tem conta? <a href="/login">Entrar agora</a></p>
+    </div>
+  </section>
+  <aside class="auth-showcase" aria-label="Compromissos da plataforma">
+    <div class="auth-showcase-content" data-reveal="right">
+      <span class="eyebrow">Tecnologia com responsabilidade</span>
+      <h2>Uma base segura para a sua próxima campanha.</h2>
+      <p>Configure sua equipe, conecte canais oficiais e evolua sua comunicação com processos claros.</p>
+      <div class="auth-benefits">
+        <span class="auth-benefit"><i class="bi bi-person-check" aria-hidden="true"></i> Gestão de consentimento por canal</span>
+        <span class="auth-benefit"><i class="bi bi-lock" aria-hidden="true"></i> Credenciais armazenadas de forma protegida</span>
+        <span class="auth-benefit"><i class="bi bi-graph-up-arrow" aria-hidden="true"></i> Indicadores reais da sua operação</span>
+      </div>
+    </div>
+  </aside>
+</div>
+{% endblock %}

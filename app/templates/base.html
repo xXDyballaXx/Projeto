@@ -4,44 +4,48 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Campanhas responsáveis com IA e APIs oficiais da Meta">
+  <meta name="theme-color" content="#080B14">
+  <link rel="icon" href="/static/images/favicon.svg" type="image/svg+xml">
   <title>{% block title %}{{ app_name }}{% endblock %}</title>
+  <script src="/static/js/init.js"></script>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
-  <link href="/static/css/app.css" rel="stylesheet">
-  <link href="/static/css/lists.css" rel="stylesheet">
+  <link href="/static/css/variables.css" rel="stylesheet">
+  <link href="/static/css/base.css" rel="stylesheet">
+  <link href="/static/css/layout.css" rel="stylesheet">
+  <link href="/static/css/components.css" rel="stylesheet">
+  <link href="/static/css/forms.css" rel="stylesheet">
+  <link href="/static/css/tables.css" rel="stylesheet">
+  <link href="/static/css/animations.css" rel="stylesheet">
+  <link href="/static/css/dashboard.css" rel="stylesheet">
+  <link href="/static/css/pages.css" rel="stylesheet">
+  <link href="/static/css/responsive.css" rel="stylesheet">
+  {% if page == 'contacts' %}<link href="/static/css/lists.css" rel="stylesheet">{% endif %}
 </head>
-<body data-page="{{ page|default('public') }}">
-{% if page %}
-<div class="app-shell">
-  <aside class="sidebar" id="sidebar">
-    <a class="brand text-white" href="/dashboard"><span class="brand-mark">D</span> Divulgaí IA</a>
-    <nav class="nav flex-column mt-4">
-      <a class="nav-link {% if page == 'dashboard' %}active{% endif %}" href="/dashboard"><i class="bi bi-grid"></i> Painel</a>
-      <a class="nav-link {% if page == 'contacts' %}active{% endif %}" href="/contatos"><i class="bi bi-people"></i> Contatos</a>
-      <a class="nav-link {% if page == 'campaigns' %}active{% endif %}" href="/campanhas"><i class="bi bi-megaphone"></i> Campanhas</a>
-      <a class="nav-link {% if page == 'content' %}active{% endif %}" href="/conteudo-ia"><i class="bi bi-stars"></i> Conteúdo com IA</a>
-      <a class="nav-link {% if page == 'history' %}active{% endif %}" href="/historico"><i class="bi bi-clock-history"></i> Histórico</a>
-      <a class="nav-link {% if page == 'integrations' %}active{% endif %}" href="/integracoes"><i class="bi bi-plug"></i> Integrações</a>
-      <a class="nav-link {% if page == 'settings' %}active{% endif %}" href="/configuracoes"><i class="bi bi-gear"></i> Configurações</a>
-      <a class="nav-link {% if page == 'admin' %}active{% endif %}" href="/administracao"><i class="bi bi-shield-lock"></i> Administração</a>
-    </nav>
-    <button class="btn btn-outline-light w-100 mt-auto" id="logout"><i class="bi bi-box-arrow-left"></i> Sair</button>
-  </aside>
-  <main class="main-content">
-    <header class="topbar">
-      <button class="btn d-lg-none" id="menuToggle" aria-label="Abrir menu"><i class="bi bi-list fs-4"></i></button>
-      <div><small class="text-muted">Marketing responsável</small><div class="fw-semibold">{{ app_name }}</div></div>
-      {% if simulation_mode %}<span class="badge text-bg-warning ms-auto">Modo de desenvolvimento / simulação</span>{% endif %}
-    </header>
-    <div class="content-wrap">{% block content %}{% endblock %}</div>
-  </main>
-</div>
-{% else %}
-{% block public_content %}{% endblock %}
-{% endif %}
-<div class="toast-container position-fixed top-0 end-0 p-3"><div id="appToast" class="toast" role="alert"><div class="toast-body"></div></div></div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
-<script src="/static/js/app.js"></script>
+<body data-page="{{ page|default('public') }}" class="{% if page %}app-page{% else %}public-page{% endif %}">
+  <a class="skip-link" href="{% if page %}#main-content{% else %}#public-content{% endif %}">Pular para o conteúdo</a>
+  <div class="page-transition" aria-hidden="true"></div>
+
+  {% if page %}
+    <div class="app-shell">
+      {% include "components/sidebar.html" %}
+      <div class="sidebar-backdrop" id="sidebarBackdrop" aria-hidden="true"></div>
+      <main class="main-content" id="main-content" tabindex="-1">
+        {% include "components/topbar.html" %}
+        <div class="content-wrap page-enter">{% block content %}{% endblock %}</div>
+      </main>
+    </div>
+  {% else %}
+    <main id="main-content" tabindex="-1" class="page-enter">{% block public_content %}{% endblock %}</main>
+  {% endif %}
+
+  {% include "components/toast.html" %}
+  {% include "components/confirm_modal.html" %}
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  {% if page == 'dashboard' %}<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>{% endif %}
+  <script src="/static/js/navigation.js"></script>
+  <script src="/static/js/animations.js"></script>
+  <script src="/static/js/app.js"></script>
 </body>
 </html>

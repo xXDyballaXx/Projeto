@@ -1,6 +1,42 @@
-{% extends "base.html" %}{% block title %}Painel · {{ app_name }}{% endblock %}{% block content %}
-<div class="page-heading"><div><span class="eyebrow">VISÃO GERAL</span><h1>Seu marketing, em movimento</h1></div><a class="btn btn-primary" href="/campanhas"><i class="bi bi-plus-lg"></i> Nova campanha</a></div>
-<div class="row g-3" id="stats"><div class="col-12"><div class="loading-card">Carregando indicadores…</div></div></div>
-<div class="row g-4 mt-1"><div class="col-lg-8"><div class="panel"><h2>Desempenho geral</h2><div class="chart-wrap"><canvas id="performanceChart"></canvas></div></div></div><div class="col-lg-4"><div class="panel"><h2>Atividades recentes</h2><div id="activities" class="activity-list"></div></div></div></div>
-{% endblock %}
+{% extends "base.html" %}
+{% block title %}Painel · {{ app_name }}{% endblock %}
+{% block content %}
+<div class="page-heading" data-reveal="up">
+  <div>
+    <span class="eyebrow">Visão geral</span>
+    <h1>Seu marketing, em movimento</h1>
+    <p>Acompanhe a operação e encontre rapidamente o que precisa da sua atenção.</p>
+  </div>
+  <div class="page-heading-actions"><a class="btn btn-primary" href="/campanhas"><i class="bi bi-plus-lg" aria-hidden="true"></i> Nova campanha</a></div>
+</div>
 
+<section aria-label="Indicadores da operação">
+  <div class="row g-3 stagger-grid" id="stats" aria-live="polite" aria-busy="true">
+    {% for item in range(8) %}<div class="col-6 col-md-4 col-xl-3"><div class="loading-card">Carregando indicador…</div></div>{% endfor %}
+  </div>
+</section>
+
+<div class="row g-4 mt-1">
+  <div class="col-xl-8" data-reveal="up">
+    <section class="panel h-100" aria-labelledby="performanceTitle">
+      <div class="panel-heading"><div><h2 id="performanceTitle">Desempenho geral</h2><p>Panorama dos dados atuais da sua operação.</p></div><span class="chart-legend">Dados atuais</span></div>
+      <div class="chart-wrap"><canvas id="performanceChart" role="img" aria-label="Gráfico de contatos, campanhas, agendamentos e envios"></canvas></div>
+    </section>
+  </div>
+  <div class="col-xl-4" data-reveal="up" style="--reveal-delay: 80ms">
+    <section class="panel h-100" aria-labelledby="activitiesTitle">
+      <div class="panel-heading"><div><h2 id="activitiesTitle">Atividades recentes</h2><p>Movimentações registradas na conta.</p></div><i class="bi bi-activity text-secondary" aria-hidden="true"></i></div>
+      <div id="activities" class="activity-list" aria-live="polite" aria-busy="true"><div class="loading-card">Carregando atividades…</div></div>
+    </section>
+  </div>
+</div>
+
+<section class="panel mt-4" data-reveal="up" aria-labelledby="quickActionsTitle">
+  <div class="panel-heading"><div><h2 id="quickActionsTitle">Acesso rápido</h2><p>Atalhos para as tarefas mais frequentes.</p></div></div>
+  <div class="quick-actions">
+    <a class="quick-action" href="/contatos"><i class="bi bi-person-plus" aria-hidden="true"></i><span>Organizar contatos</span></a>
+    <a class="quick-action" href="/conteudo-ia"><i class="bi bi-stars" aria-hidden="true"></i><span>Criar com IA</span></a>
+    <a class="quick-action" href="/integracoes"><i class="bi bi-plug" aria-hidden="true"></i><span>Configurar canais</span></a>
+  </div>
+</section>
+{% endblock %}

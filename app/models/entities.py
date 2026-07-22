@@ -69,6 +69,7 @@ class User(TimestampMixin, Base):
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
     failed_login_attempts: Mapped[int] = mapped_column(Integer, default=0)
     locked_until: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    token_version: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
     company: Mapped[Company] = relationship(back_populates="users")
 
 
@@ -117,6 +118,9 @@ class Campaign(TimestampMixin, Base):
     company_id: Mapped[int] = mapped_column(ForeignKey("companies.id", ondelete="CASCADE"), index=True)
     created_by_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
     contact_list_id: Mapped[int | None] = mapped_column(ForeignKey("contact_lists.id"))
+    message_template_id: Mapped[int | None] = mapped_column(
+        ForeignKey("message_templates.id", ondelete="SET NULL", name="fk_campaign_message_template")
+    )
     internal_name: Mapped[str] = mapped_column(String(160))
     title: Mapped[str] = mapped_column(String(200))
     body: Mapped[str] = mapped_column(Text)
@@ -182,6 +186,7 @@ class MessageTemplate(TimestampMixin, Base):
 
 class Integration(TimestampMixin, Base):
     __tablename__ = "integrations"
+    __table_args__ = (UniqueConstraint("company_id", "provider", name="uq_integration_company_provider"),)
     id: Mapped[int] = mapped_column(primary_key=True)
     company_id: Mapped[int] = mapped_column(ForeignKey("companies.id", ondelete="CASCADE"), index=True)
     provider: Mapped[str] = mapped_column(String(40))
@@ -194,6 +199,7 @@ class Integration(TimestampMixin, Base):
 
 class ApiCredential(TimestampMixin, Base):
     __tablename__ = "api_credentials"
+    __table_args__ = (UniqueConstraint("integration_id", "key_name", name="uq_credential_integration_key"),)
     id: Mapped[int] = mapped_column(primary_key=True)
     integration_id: Mapped[int] = mapped_column(ForeignKey("integrations.id", ondelete="CASCADE"), index=True)
     key_name: Mapped[str] = mapped_column(String(80))

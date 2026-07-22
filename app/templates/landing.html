@@ -1,20 +1,189 @@
 {% extends "base.html" %}
+{% block title %}Divulgaí IA — Marketing responsável com inteligência{% endblock %}
 {% block public_content %}
-<nav class="navbar navbar-expand-lg bg-white border-bottom sticky-top"><div class="container py-2">
-  <a class="navbar-brand brand text-dark" href="/"><span class="brand-mark">D</span> Divulgaí IA</a>
-  <div class="ms-auto d-flex gap-2"><a class="btn btn-light" href="/login">Entrar</a><a class="btn btn-primary" href="/cadastro">Começar agora</a></div>
-</div></nav>
-<header class="hero"><div class="container"><div class="row align-items-center g-5">
-  <div class="col-lg-7"><span class="eyebrow">MARKETING COM CONSENTIMENTO</span><h1>Campanhas que chegam longe, sem ultrapassar limites.</h1><p class="lead">Crie conteúdo com IA, organize seus contatos e publique via APIs oficiais da Meta — com consentimento, auditoria e controle em cada envio.</p><div class="d-flex gap-3 flex-wrap"><a class="btn btn-primary btn-lg" href="/cadastro">Criar conta grátis</a><a class="btn btn-outline-dark btn-lg" href="#recursos">Conhecer recursos</a></div></div>
-  <div class="col-lg-5"><div class="hero-card"><div class="d-flex justify-content-between"><strong>Visão geral</strong><span class="status-dot">Operação segura</span></div><div class="mini-stat"><span>Contatos autorizados</span><strong>2.480</strong></div><div class="mini-stat"><span>Taxa de entrega</span><strong>96,8%</strong></div><div class="progress" role="progressbar"><div class="progress-bar" style="width: 82%"></div></div><small>Dados ilustrativos da interface</small></div></div>
-</div></div></header>
-<section id="recursos" class="section"><div class="container"><div class="section-heading"><span class="eyebrow">TUDO EM UM SÓ LUGAR</span><h2>Do rascunho ao resultado</h2></div><div class="row g-4">
-{% for icon,title,text in [('people','Contatos e consentimento','Importe, segmente e respeite a escolha de cada pessoa.'),('stars','Conteúdo com IA','Gere variações e mantenha a aprovação nas mãos da sua equipe.'),('calendar-check','Agendamento','Planeje WhatsApp, Facebook e Instagram com rastreabilidade.'),('shield-check','Governança','Idempotência, limites anti-spam, auditoria e proteção de credenciais.'),('bar-chart','Resultados','Acompanhe entregas, falhas, leituras e atividades recentes.'),('plug','APIs oficiais','Somente WhatsApp Business Cloud e Graph APIs da Meta.')] %}
-<div class="col-md-6 col-lg-4"><div class="feature-card"><i class="bi bi-{{ icon }}"></i><h3>{{ title }}</h3><p>{{ text }}</p></div></div>{% endfor %}
-</div></div></section>
-<section class="section bg-soft"><div class="container"><div class="section-heading"><span class="eyebrow">PERGUNTAS FREQUENTES</span><h2>Transparência desde o início</h2></div><div class="accordion mx-auto faq" id="faq">
-{% for q,a in [('O sistema usa WhatsApp Web?','Não. O Divulgaí IA usa exclusivamente a WhatsApp Business Cloud API oficial.'),('Posso enviar para qualquer número?','Não. Todo destinatário precisa ter consentimento válido e registrado para o canal.'),('A IA publica sozinha?','Nunca. O conteúdo gerado fica como rascunho até a revisão e aprovação humana.'),('Preciso de aprovação da Meta?','Sim. Recursos reais dependem de conta empresarial, permissões, tokens e templates aprovados pela Meta.')] %}<div class="accordion-item"><h3 class="accordion-header"><button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#faq{{ loop.index }}">{{ q }}</button></h3><div id="faq{{ loop.index }}" class="accordion-collapse collapse" data-bs-parent="#faq"><div class="accordion-body">{{ a }}</div></div></div>{% endfor %}
-</div></div></section>
-<footer class="footer"><div class="container d-flex flex-wrap justify-content-between gap-3"><div><strong>Divulgaí IA</strong><p>Marketing responsável, feito para durar.</p></div><div class="d-flex gap-4"><a href="/termos">Termos</a><a href="/privacidade">Privacidade</a><a href="mailto:contato@exemplo.com">Contato</a></div></div></footer>
-{% endblock %}
+<div class="landing-page">
+  <nav class="public-navbar" id="publicNavbar" aria-label="Navegação principal">
+    <div class="landing-container navbar-inner">
+      <a class="brand" href="/" aria-label="Divulgaí IA — Início">
+        <span class="brand-mark" aria-hidden="true"><i class="bi bi-stars"></i></span>
+        <span class="brand-copy">Divulgaí <b>IA</b></span>
+      </a>
+      <div class="public-nav-links" id="publicNavLinks">
+        <a class="desktop-link" href="#recursos">Recursos</a>
+        <a class="desktop-link" href="#como-funciona">Como funciona</a>
+        <a class="desktop-link" href="#seguranca">Segurança</a>
+        <a class="desktop-link" href="#faq">Dúvidas</a>
+        <a class="btn btn-light mobile-nav-action" href="/login">Entrar</a>
+        <a class="btn btn-primary mobile-nav-action" href="/cadastro">Criar conta grátis</a>
+      </div>
+      <div class="public-nav-actions">
+        <a class="btn btn-light login-link" href="/login">Entrar</a>
+        <a class="btn btn-primary navbar-cta" href="/cadastro">Começar agora <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
+        <button class="icon-button public-menu-button" id="publicMenuToggle" type="button" aria-label="Abrir menu" aria-controls="publicNavLinks" aria-expanded="false">
+          <i class="bi bi-list" aria-hidden="true"></i>
+        </button>
+      </div>
+    </div>
+  </nav>
 
+  <header class="hero" id="public-content" tabindex="-1">
+    <span class="hero-orb one" aria-hidden="true"></span>
+    <span class="hero-orb two" aria-hidden="true"></span>
+    <div class="landing-container">
+      <div class="row align-items-center g-5">
+        <div class="col-lg-7 hero-copy" data-reveal="up">
+          <span class="eyebrow">Marketing com consentimento</span>
+          <h1>Campanhas inteligentes. <span class="gradient-text">Relações que duram.</span></h1>
+          <p class="lead">Crie conteúdo com IA, organize contatos e publique pelos canais oficiais da Meta, mantendo consentimento, auditoria e controle humano em cada etapa.</p>
+          <div class="hero-actions">
+            <a class="btn btn-primary btn-lg" href="/cadastro">Criar conta grátis <i class="bi bi-arrow-up-right" aria-hidden="true"></i></a>
+            <a class="btn btn-outline-secondary btn-lg" href="#como-funciona"><i class="bi bi-play-circle" aria-hidden="true"></i> Ver como funciona</a>
+          </div>
+          <div class="hero-trust" aria-label="Compromissos da plataforma">
+            <span class="trust-item"><i class="bi bi-check-circle-fill" aria-hidden="true"></i> APIs oficiais</span>
+            <span class="trust-item"><i class="bi bi-check-circle-fill" aria-hidden="true"></i> Aprovação humana</span>
+            <span class="trust-item"><i class="bi bi-check-circle-fill" aria-hidden="true"></i> Consentimento rastreável</span>
+          </div>
+        </div>
+        <div class="col-lg-5" data-reveal="scale">
+          <div class="product-visual" aria-label="Prévia ilustrativa do painel Divulgaí IA">
+            <div class="product-window">
+              <div class="window-bar">
+                <span class="window-dots" aria-hidden="true"><span></span><span></span><span></span></span>
+                <span class="window-security"><i class="bi bi-shield-check"></i> Operação protegida</span>
+              </div>
+              <div class="product-body">
+                <div class="product-mini-nav" aria-hidden="true">
+                  <span class="mini-brand"><i class="bi bi-stars"></i></span>
+                  <div class="mini-nav-item active"></div><div class="mini-nav-item"></div><div class="mini-nav-item"></div><div class="mini-nav-item"></div>
+                </div>
+                <div class="product-content" aria-hidden="true">
+                  <div class="product-heading"><span>Visão geral</span><span class="live-chip">Fluxo seguro</span></div>
+                  <div class="product-metrics">
+                    {% for item in range(3) %}<div class="product-metric"><div class="metric-line"></div><div class="metric-value"></div></div>{% endfor %}
+                  </div>
+                  <div class="product-chart">
+                    {% for size in [35, 56, 42, 75, 62, 88, 70] %}<span class="chart-bar" style="--bar-size: {{ size }}%"></span>{% endfor %}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="floating-channel ai"><i class="bi bi-stars"></i><span>IA com revisão humana</span></div>
+            <div class="floating-channel whatsapp"><i class="bi bi-whatsapp"></i><span>Canal oficial conectado</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section class="logo-strip" aria-label="Canais e tecnologias integradas">
+    <div class="landing-container logo-strip-inner">
+      <span class="logo-strip-label">Uma operação centralizada para</span>
+      <div class="integration-logos">
+        <span class="integration-logo"><i class="bi bi-whatsapp"></i> WhatsApp Business</span>
+        <span class="integration-logo"><i class="bi bi-facebook"></i> Facebook Pages</span>
+        <span class="integration-logo"><i class="bi bi-instagram"></i> Instagram</span>
+        <span class="integration-logo"><i class="bi bi-stars"></i> Inteligência artificial</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="recursos">
+    <div class="landing-container">
+      <div class="section-heading" data-reveal="up">
+        <span class="eyebrow">Tudo em um só lugar</span>
+        <h2>Do planejamento ao resultado, sem perder o controle</h2>
+        <p>Recursos pensados para tornar sua comunicação mais inteligente, organizada e responsável.</p>
+      </div>
+      <div class="row g-4 stagger-grid">
+        {% for icon,title,text in [('people','Contatos e consentimento','Importe, organize e respeite a escolha de cada pessoa em todos os canais.'),('stars','Conteúdo com IA','Gere sugestões e mantenha a revisão e aprovação nas mãos da sua equipe.'),('calendar-check','Planejamento e agenda','Prepare WhatsApp, Facebook e Instagram com rastreabilidade completa.'),('shield-check','Governança incorporada','Limites anti-spam, auditoria, idempotência e proteção de credenciais.'),('bar-chart','Resultados claros','Acompanhe entregas, falhas, leituras, cliques e atividades recentes.'),('plug','Integrações oficiais','Use WhatsApp Business Cloud e Graph APIs da Meta, sem atalhos inseguros.')] %}
+          <div class="col-md-6 col-lg-4" data-reveal="up">
+            <article class="feature-card interactive-card">
+              <span class="feature-icon" aria-hidden="true"><i class="bi bi-{{ icon }}"></i></span>
+              <h3>{{ title }}</h3><p>{{ text }}</p>
+            </article>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt" id="como-funciona">
+    <div class="landing-container">
+      <div class="section-heading" data-reveal="up">
+        <span class="eyebrow">Fluxo simples</span>
+        <h2>Três etapas para comunicar com responsabilidade</h2>
+        <p>A plataforma organiza o processo sem esconder as decisões importantes da sua equipe.</p>
+      </div>
+      <div class="steps-grid">
+        {% for title,text in [('Organize sua base','Cadastre ou importe contatos, registre a origem e mantenha o consentimento visível.'),('Crie e revise','Use a IA como apoio, ajuste a mensagem e selecione o canal oficial mais adequado.'),('Agende e acompanhe','Confirme o envio, acompanhe o processamento e consulte o histórico completo.')] %}
+          <article class="step-card" data-reveal="up" style="--reveal-delay: {{ loop.index0 * 80 }}ms">
+            <span class="step-number">0{{ loop.index }}</span><div><h3>{{ title }}</h3><p>{{ text }}</p></div>
+          </article>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="seguranca">
+    <div class="landing-container">
+      <div class="security-panel" data-reveal="scale">
+        <div>
+          <span class="eyebrow">Segurança por princípio</span>
+          <h2>Cresça sem abrir mão da confiança</h2>
+          <p>Credenciais protegidas, canais oficiais e rastreabilidade ajudam sua equipe a operar com clareza em todas as campanhas.</p>
+          <a class="btn btn-outline-primary" href="/privacidade">Conhecer nossa abordagem <i class="bi bi-arrow-right"></i></a>
+        </div>
+        <div class="security-list">
+          {% for icon,text in [('key','Tokens e credenciais armazenados de forma protegida'),('person-check','Consentimento validado antes do processamento'),('journal-check','Auditoria das principais ações da operação'),('shield-lock','Autenticação e limites internos de segurança')] %}
+            <div class="security-item"><i class="bi bi-{{ icon }}" aria-hidden="true"></i><span>{{ text }}</span></div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt" aria-labelledby="faq-title">
+    <div class="landing-container">
+      <div class="section-heading" data-reveal="up">
+        <span class="eyebrow">Perguntas frequentes</span>
+        <h2 id="faq-title">Transparência desde o primeiro acesso</h2>
+      </div>
+      <div class="accordion mx-auto faq" id="faq" data-reveal="up">
+        {% for q,a in [('O sistema usa WhatsApp Web?','Não. O Divulgaí IA usa exclusivamente a WhatsApp Business Cloud API oficial.'),('Posso enviar para qualquer número?','Não. Todo destinatário precisa ter consentimento válido e registrado para o canal.'),('A IA publica sozinha?','Nunca. O conteúdo gerado fica como rascunho até a revisão e aprovação humana.'),('Preciso de aprovação da Meta?','Sim. Recursos reais dependem de conta empresarial, permissões, tokens e templates aprovados pela Meta.')] %}
+          <div class="accordion-item">
+            <h3 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq{{ loop.index }}" aria-expanded="false" aria-controls="faq{{ loop.index }}">{{ q }}</button></h3>
+            <div id="faq{{ loop.index }}" class="accordion-collapse collapse" data-bs-parent="#faq"><div class="accordion-body">{{ a }}</div></div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="landing-container">
+      <div class="cta-panel" data-reveal="scale">
+        <span class="eyebrow">Pronto para organizar sua operação?</span>
+        <h2>Marketing inteligente começa com escolhas responsáveis</h2>
+        <p>Centralize contatos, campanhas, conteúdo e resultados em uma plataforma preparada para o seu dia a dia.</p>
+        <a class="btn btn-primary btn-lg" href="/cadastro">Criar minha conta <i class="bi bi-arrow-up-right"></i></a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="landing-container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="/"><span class="brand-mark" aria-hidden="true"><i class="bi bi-stars"></i></span><span class="brand-copy">Divulgaí <b>IA</b></span></a>
+          <p>Marketing responsável, inteligente e feito para construir relações duradouras.</p>
+        </div>
+        <div><h3>Plataforma</h3><div class="footer-links"><a href="#recursos">Recursos</a><a href="#como-funciona">Como funciona</a><a href="#seguranca">Segurança</a></div></div>
+        <div><h3>Acesso</h3><div class="footer-links"><a href="/login">Entrar</a><a href="/cadastro">Criar conta</a><a href="/api/docs">Documentação da API</a></div></div>
+        <div><h3>Legal</h3><div class="footer-links"><a href="/termos">Termos de uso</a><a href="/privacidade">Privacidade</a></div></div>
+      </div>
+      <div class="footer-bottom"><p>&copy; 2026 Divulgaí IA. Todos os direitos reservados.</p><p>APIs oficiais · Consentimento · Controle humano</p></div>
+    </div>
+  </footer>
+</div>
+{% endblock %}
