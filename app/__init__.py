@@ -1,0 +1,2 @@
+"""Divulgaí IA application package."""
+

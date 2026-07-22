@@ -1,0 +1,6 @@
+{% extends "base.html" %}{% block title %}Painel · {{ app_name }}{% endblock %}{% block content %}
+<div class="page-heading"><div><span class="eyebrow">VISÃO GERAL</span><h1>Seu marketing, em movimento</h1></div><a class="btn btn-primary" href="/campanhas"><i class="bi bi-plus-lg"></i> Nova campanha</a></div>
+<div class="row g-3" id="stats"><div class="col-12"><div class="loading-card">Carregando indicadores…</div></div></div>
+<div class="row g-4 mt-1"><div class="col-lg-8"><div class="panel"><h2>Desempenho geral</h2><div class="chart-wrap"><canvas id="performanceChart"></canvas></div></div></div><div class="col-lg-4"><div class="panel"><h2>Atividades recentes</h2><div id="activities" class="activity-list"></div></div></div></div>
+{% endblock %}
+

@@ -1,0 +1,30 @@
+.list-contact-options {
+  max-height: 260px;
+  overflow-y: auto;
+  border: 1px solid var(--border);
+  border-radius: .7rem;
+  background: var(--soft);
+}
+
+.list-contact-option {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  padding: .75rem .9rem;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+}
+
+.list-contact-option:last-child { border-bottom: 0; }
+.list-contact-option:hover { background: #fff; }
+
+.list-card {
+  height: 100%;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: .85rem;
+  background: var(--soft);
+}
+
+.list-card strong { display: block; }
+.list-card small { color: var(--muted); }
