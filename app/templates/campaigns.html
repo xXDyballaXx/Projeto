@@ -1,4 +1,58 @@
-{% extends "base.html" %}{% block content %}<div class="page-heading"><div><span class="eyebrow">PLANEJAMENTO</span><h1>Campanhas</h1><p>Crie, revise e agende em canais oficiais.</p></div><button class="btn btn-primary" id="newCampaignButton" type="button"><i class="bi bi-plus-lg"></i> Criar campanha</button></div>
-<div class="panel"><div class="table-responsive"><table class="table align-middle"><thead><tr><th>Campanha</th><th>Canal</th><th>Agendamento</th><th>Status</th><th></th></tr></thead><tbody id="campaignsTable"></tbody></table></div></div>
-<div class="modal fade" id="campaignModal" tabindex="-1"><div class="modal-dialog modal-lg"><form class="modal-content" id="campaignEditorForm"><input type="hidden" name="campaign_id"><div class="modal-header"><h2 class="modal-title fs-5" id="campaignModalTitle">Nova campanha</h2><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="row g-3"><div class="col-md-6"><label class="form-label">Nome interno</label><input class="form-control" name="internal_name" required></div><div class="col-md-6"><label class="form-label">Título</label><input class="form-control" name="title" required></div><div class="col-12"><label class="form-label">Texto principal</label><textarea class="form-control" name="body" rows="5" maxlength="4096" required></textarea></div><div class="col-md-4"><label class="form-label">Canal</label><select class="form-select" name="channel"><option value="whatsapp">WhatsApp</option><option value="facebook">Facebook</option><option value="instagram">Instagram</option></select></div><div class="col-md-4"><label class="form-label">Lista de contatos</label><select class="form-select" name="contact_list_id" id="campaignList"><option value="">Nenhuma</option></select></div><div class="col-md-4"><label class="form-label">Agendar (opcional)</label><input class="form-control" name="scheduled_at" type="datetime-local"></div><div class="col-md-6"><label class="form-label">Chamada para ação</label><input class="form-control" name="call_to_action"></div><div class="col-md-6"><label class="form-label">Link HTTPS</label><input class="form-control" name="link_url" type="url"></div><div class="col-12"><label class="form-label">Imagem ou vídeo (JPG, PNG, WebP, MP4)</label><input class="form-control" name="media" type="file" accept="image/jpeg,image/png,image/webp,video/mp4"><small class="text-muted" id="campaignMediaHint">Ao editar, deixe vazio para manter a mídia atual.</small></div><div class="col-12"><div class="alert alert-info mb-0">WhatsApp exige template aprovado e consentimento. Instagram exige mídia pública compatível. A publicação só ocorre após ação explícita.</div></div></div></div><div class="modal-footer"><button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button><button class="btn btn-primary" id="campaignSubmitButton">Salvar campanha</button></div></form></div></div>
+{% extends "base.html" %}
+{% block title %}Campanhas · {{ app_name }}{% endblock %}
+{% block content %}
+<div class="page-heading" data-reveal="up">
+  <div><span class="eyebrow">Planejamento</span><h1>Campanhas</h1><p>Crie, revise e agende comunicações pelos canais oficiais.</p></div>
+  <div class="page-heading-actions"><button class="btn btn-primary" id="newCampaignButton" type="button"><i class="bi bi-plus-lg" aria-hidden="true"></i> Criar campanha</button></div>
+</div>
+
+<section class="panel" data-reveal="up" aria-labelledby="campaignsTitle">
+  <div class="panel-heading"><div><h2 id="campaignsTitle">Suas campanhas</h2><p>Acompanhe o canal, agendamento e estado de cada comunicação.</p></div><span class="badge text-bg-light"><i class="bi bi-check2-circle me-1"></i> Aprovação explícita</span></div>
+  <div class="table-responsive">
+    <table class="table align-middle" aria-describedby="campaignsTitle">
+      <thead><tr><th scope="col">Campanha</th><th scope="col">Canal</th><th scope="col">Agendamento</th><th scope="col">Status</th><th scope="col" class="text-end">Ações</th></tr></thead>
+      <tbody id="campaignsTable" aria-live="polite"><tr><td colspan="5"><div class="empty-state compact"><span class="button-spinner" aria-hidden="true"></span><p class="mt-2">Carregando campanhas…</p></div></td></tr></tbody>
+    </table>
+  </div>
+</section>
+
+<section class="panel mt-4" data-reveal="up" aria-labelledby="scheduledTasksTitle">
+  <div class="panel-heading"><div><h2 id="scheduledTasksTitle">Agendamentos e processamento</h2><p>Acompanhe tentativas, horários e resultados registrados pela fila.</p></div><span class="badge text-bg-light"><i class="bi bi-clock me-1"></i> Celery + Redis</span></div>
+  <div class="table-responsive"><table class="table align-middle" aria-describedby="scheduledTasksTitle"><thead><tr><th scope="col">Campanha</th><th scope="col">Execução</th><th scope="col">Status</th><th scope="col">Tentativas</th><th scope="col">Resultado</th></tr></thead><tbody id="campaignTasksTable" aria-live="polite"><tr><td colspan="5"><div class="empty-state compact"><span class="button-spinner" aria-hidden="true"></span><p class="mt-2">Carregando tarefas…</p></div></td></tr></tbody></table></div>
+</section>
+
+<div class="modal fade" id="campaignModal" tabindex="-1" aria-labelledby="campaignModalTitle" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+    <form class="modal-content" id="campaignEditorForm" novalidate>
+      <input type="hidden" name="campaign_id">
+      <div class="modal-header"><div><h2 class="modal-title fs-5" id="campaignModalTitle">Nova campanha</h2><small>Defina o conteúdo, o público e o momento da publicação.</small></div><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button></div>
+      <div class="modal-body">
+        <div class="row g-3">
+          <div class="col-md-6"><label class="form-label" for="campaignInternalName">Nome interno</label><input class="form-control" id="campaignInternalName" name="internal_name" required placeholder="Ex.: Lançamento de julho"><small class="field-hint">Visível apenas para sua equipe.</small></div>
+          <div class="col-md-6"><label class="form-label" for="campaignTitle">Título</label><input class="form-control" id="campaignTitle" name="title" required placeholder="Título da mensagem"></div>
+          <div class="col-12"><label class="form-label" for="campaignBody">Texto principal</label><textarea class="form-control" id="campaignBody" name="body" rows="5" maxlength="4096" required placeholder="Escreva a mensagem da campanha"></textarea></div>
+          <div class="col-md-4"><label class="form-label" for="campaignChannel">Canal</label><select class="form-select" id="campaignChannel" name="channel"><option value="whatsapp">WhatsApp</option><option value="facebook">Facebook</option><option value="instagram">Instagram</option></select></div>
+          <div class="col-md-4"><label class="form-label" for="campaignList">Lista de contatos</label><select class="form-select" name="contact_list_id" id="campaignList"><option value="">Nenhuma</option></select></div>
+          <div class="col-md-4"><label class="form-label" for="campaignScheduledAt">Agendar <span class="text-muted">(opcional)</span></label><input class="form-control" id="campaignScheduledAt" name="scheduled_at" type="datetime-local"></div>
+          <div class="col-12 d-none" id="campaignTemplateField"><label class="form-label" for="campaignTemplate">Template oficial do WhatsApp</label><select class="form-select" name="message_template_id" id="campaignTemplate" aria-describedby="campaignTemplateHint"><option value="">Selecione um template aprovado</option></select><small class="field-hint" id="campaignTemplateHint">Obrigatório no modo real; sincronize a aprovação na página de Integrações.</small></div>
+          <div class="col-md-6"><label class="form-label" for="campaignCta">Chamada para ação <span class="text-muted">(opcional)</span></label><input class="form-control" id="campaignCta" name="call_to_action" placeholder="Ex.: Saiba mais"></div>
+          <div class="col-md-6"><label class="form-label" for="campaignLink">Link HTTPS <span class="text-muted">(opcional)</span></label><input class="form-control" id="campaignLink" name="link_url" type="url" placeholder="https://seusite.com.br"></div>
+          <div class="col-12"><label class="form-label" for="campaignMedia">Imagem ou vídeo</label><input class="form-control" id="campaignMedia" name="media" type="file" accept="image/jpeg,image/png,image/webp,video/mp4" aria-describedby="campaignMediaHint"><small class="field-hint" id="campaignMediaHint">Formatos aceitos: JPG, PNG, WebP e MP4. Ao editar, deixe vazio para manter a mídia atual.</small></div>
+          <div class="col-12"><div class="alert alert-info mb-0"><i class="bi bi-info-circle me-2" aria-hidden="true"></i>WhatsApp exige template aprovado e consentimento. Instagram exige mídia pública compatível. A publicação só ocorre após ação explícita.</div></div>
+        </div>
+      </div>
+      <div class="modal-footer"><button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button><button class="btn btn-primary" id="campaignSubmitButton" type="submit"><i class="bi bi-check2" aria-hidden="true"></i> Salvar campanha</button></div>
+    </form>
+  </div>
+</div>
+
+<div class="modal fade" id="campaignPreviewModal" tabindex="-1" aria-labelledby="campaignPreviewTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header"><div><h2 class="modal-title fs-5" id="campaignPreviewTitle">Pré-visualização</h2><small id="campaignPreviewChannel"></small></div><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button></div>
+      <div class="modal-body"><article class="campaign-preview"><h3 id="campaignPreviewHeading"></h3><p id="campaignPreviewBody"></p><p class="fw-semibold" id="campaignPreviewCta"></p><a id="campaignPreviewLink" target="_blank" rel="noopener noreferrer"></a><div id="campaignPreviewMedia" class="mt-3"></div></article></div>
+      <div class="modal-footer"><button type="button" class="btn btn-light" data-bs-dismiss="modal">Fechar</button></div>
+    </div>
+  </div>
+</div>
 {% endblock %}

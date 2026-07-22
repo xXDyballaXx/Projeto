@@ -1,2 +1,34 @@
-{% extends "base.html" %}{% block content %}<div class="page-heading"><div><span class="eyebrow">COPILOTO CRIATIVO</span><h1>Conteúdo com IA</h1><p>A IA sugere. Sua equipe revisa e decide.</p></div></div><div class="row g-4"><div class="col-lg-5"><form class="panel vstack gap-3" id="contentForm"><h2>Briefing</h2><div><label class="form-label">Produto ou serviço</label><input class="form-control" name="product" required></div><div><label class="form-label">Público-alvo</label><input class="form-control" name="audience" required></div><div><label class="form-label">Objetivo</label><input class="form-control" name="objective" required></div><div class="row g-3"><div class="col-6"><label class="form-label">Tom</label><select class="form-select" name="tone"><option>profissional</option><option>acolhedor</option><option>direto</option><option>descontraído</option></select></div><div class="col-6"><label class="form-label">Canal</label><select class="form-select" name="channel"><option value="whatsapp">WhatsApp</option><option value="instagram">Instagram</option><option value="facebook">Facebook</option></select></div></div><div><label class="form-label">Informações obrigatórias</label><textarea class="form-control" name="required_information" rows="3"></textarea></div><button class="btn btn-primary btn-lg"><i class="bi bi-stars"></i> Gerar sugestão</button></form></div><div class="col-lg-7"><div class="panel h-100"><div class="d-flex justify-content-between"><h2>Resultado editável</h2><span id="aiProvider" class="badge text-bg-light">Aguardando briefing</span></div><textarea id="generatedContent" class="form-control result-editor" placeholder="O conteúdo aparecerá aqui. Revise todas as informações antes de aprovar."></textarea><div class="d-flex gap-2 mt-3 flex-wrap"><button id="copyContent" class="btn btn-outline-secondary"><i class="bi bi-copy"></i> Copiar</button><button id="approveContent" class="btn btn-success" disabled><i class="bi bi-check2"></i> Aprovar para campanha</button></div><p class="small text-muted mt-3 mb-0">O sistema nunca publica conteúdo gerado automaticamente.</p></div></div></div>{% endblock %}
+{% extends "base.html" %}
+{% block title %}Conteúdo com IA · {{ app_name }}{% endblock %}
+{% block content %}
+<div class="page-heading" data-reveal="up">
+  <div><span class="eyebrow">Copiloto criativo</span><h1>Conteúdo com IA</h1><p>A IA sugere. Sua equipe revisa, edita e decide o que será utilizado.</p></div>
+  <div class="page-heading-actions"><span class="badge text-bg-light"><i class="bi bi-person-check me-1"></i> Revisão humana obrigatória</span></div>
+</div>
 
+<div class="row g-4">
+  <div class="col-lg-5" data-reveal="left">
+    <form class="panel vstack gap-3 h-100" id="contentForm" novalidate>
+      <div class="panel-heading"><div><h2>Briefing</h2><p>Quanto mais contexto, mais útil será a sugestão.</p></div><span class="feature-icon mb-0"><i class="bi bi-stars" aria-hidden="true"></i></span></div>
+      <div><label class="form-label" for="contentProduct">Produto ou serviço</label><input class="form-control" id="contentProduct" name="product" required placeholder="O que você deseja divulgar?"></div>
+      <div><label class="form-label" for="contentAudience">Público-alvo</label><input class="form-control" id="contentAudience" name="audience" required placeholder="Para quem é esta mensagem?"></div>
+      <div><label class="form-label" for="contentObjective">Objetivo</label><input class="form-control" id="contentObjective" name="objective" required placeholder="Ex.: apresentar uma novidade"></div>
+      <div class="row g-3">
+        <div class="col-6"><label class="form-label" for="contentTone">Tom</label><select class="form-select" id="contentTone" name="tone"><option>profissional</option><option>acolhedor</option><option>direto</option><option>descontraído</option></select></div>
+        <div class="col-6"><label class="form-label" for="contentChannel">Canal</label><select class="form-select" id="contentChannel" name="channel"><option value="whatsapp">WhatsApp</option><option value="instagram">Instagram</option><option value="facebook">Facebook</option></select></div>
+      </div>
+      <div><label class="form-label" for="contentRequiredInfo">Informações obrigatórias <span class="text-muted">(opcional)</span></label><textarea class="form-control" id="contentRequiredInfo" name="required_information" rows="3" placeholder="Preços, datas, condições ou termos que não podem faltar"></textarea></div>
+      <button class="btn btn-primary btn-lg mt-auto" type="submit"><i class="bi bi-stars" aria-hidden="true"></i> <span>Gerar sugestão</span></button>
+    </form>
+  </div>
+  <div class="col-lg-7" data-reveal="right">
+    <section class="panel h-100" aria-labelledby="resultTitle">
+      <div class="panel-heading"><div><h2 id="resultTitle">Resultado editável</h2><p>Revise fatos, tom e adequação antes de aprovar.</p></div><span id="aiProvider" class="badge text-bg-light">Aguardando briefing</span></div>
+      <label class="form-label" for="generatedContent">Sugestão gerada</label>
+      <textarea id="generatedContent" class="form-control result-editor" placeholder="O conteúdo aparecerá aqui após a geração."></textarea>
+      <div class="d-flex gap-2 mt-3 flex-wrap"><button id="copyContent" class="btn btn-outline-secondary" type="button"><i class="bi bi-copy" aria-hidden="true"></i> Copiar</button><button id="approveContent" class="btn btn-success" type="button" disabled><i class="bi bi-check2" aria-hidden="true"></i> Aprovar para campanha</button></div>
+      <div class="alert alert-info mt-3 mb-0"><i class="bi bi-shield-check me-2" aria-hidden="true"></i>O sistema nunca publica conteúdo gerado automaticamente.</div>
+    </section>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,29 @@
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes shimmer { to { background-position: -200% 0; } }
+@keyframes pageIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes floatSoft { 0%, 100% { transform: translate3d(0, 0, 0); } 50% { transform: translate3d(0, -8px, 0); } }
+@keyframes pulseSoft { 0%, 100% { opacity: 0.45; transform: scale(0.96); } 50% { opacity: 0.78; transform: scale(1.03); } }
+
+.page-enter { animation: pageIn 420ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+.page-transition { position: fixed; inset: 0; z-index: 3000; visibility: hidden; pointer-events: none; background: var(--bg-primary); opacity: 0; transition: opacity 180ms ease, visibility 180ms ease; }
+body.page-leaving .page-transition { visibility: visible; opacity: 1; }
+
+.js .reveal, .js .reveal-up, .js .reveal-left, .js .reveal-right, .js .reveal-scale, .js [data-reveal] { opacity: 0; transition: opacity 600ms cubic-bezier(0.22, 1, 0.36, 1), transform 600ms cubic-bezier(0.22, 1, 0.36, 1); transition-delay: var(--reveal-delay, 0ms); }
+.js .reveal, .js .reveal-up, .js [data-reveal="up"] { transform: translate3d(0, 24px, 0); }
+.js .reveal-left, .js [data-reveal="left"] { transform: translate3d(-24px, 0, 0); }
+.js .reveal-right, .js [data-reveal="right"] { transform: translate3d(24px, 0, 0); }
+.js .reveal-scale, .js [data-reveal="scale"] { transform: scale(0.965); }
+.is-visible { opacity: 1 !important; transform: none !important; }
+.stagger-grid > * { --reveal-delay: calc(var(--reveal-index, 0) * 65ms); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
+  }
+  .reveal, .reveal-up, .reveal-left, .reveal-right, .reveal-scale, [data-reveal] { opacity: 1 !important; transform: none !important; }
+  .page-transition { display: none; }
+}

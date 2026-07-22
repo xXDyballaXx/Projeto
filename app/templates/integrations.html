@@ -1,1 +1,41 @@
-{% extends "base.html" %}{% block content %}<div class="page-heading"><div><span class="eyebrow">CONEXÕES OFICIAIS</span><h1>Integrações</h1><p>Tokens ficam criptografados e nunca retornam ao navegador.</p></div></div><div class="row g-4" id="integrationCards">{% for provider,icon,title,text in [('whatsapp','whatsapp','WhatsApp Business','Cloud API e templates aprovados'),('facebook','facebook','Facebook Pages','Publicações em páginas administradas'),('instagram','instagram','Instagram profissional','Contas comerciais ou de criador'),('ai','stars','Provedor de IA','Geração assistida com revisão humana')] %}<div class="col-md-6"><div class="panel integration-card" data-provider="{{ provider }}"><i class="bi bi-{{ icon }}"></i><div><h2>{{ title }}</h2><p>{{ text }}</p><span class="badge text-bg-secondary integration-status">Não configurada</span></div><button class="btn btn-outline-primary ms-auto configureIntegration">Configurar</button></div></div>{% endfor %}</div><div class="alert alert-warning mt-4"><strong>Importante:</strong> ativação real depende das permissões, revisão do app, conta empresarial e tokens emitidos pela Meta.</div><div class="modal fade" id="integrationModal" tabindex="-1"><div class="modal-dialog"><form class="modal-content" id="integrationForm"><div class="modal-header"><h2 class="modal-title fs-5">Configurar integração</h2><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body vstack gap-3"><input type="hidden" name="provider"><div><label class="form-label">Identificador da conta, página ou número</label><input class="form-control" name="external_account_id"></div><div><label class="form-label">Token/chave de acesso</label><input class="form-control" name="token" type="password" autocomplete="new-password"><small class="text-muted">Será enviado uma vez, criptografado no servidor e nunca exibido novamente.</small></div></div><div class="modal-footer"><button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button><button class="btn btn-primary">Salvar com segurança</button></div></form></div></div>{% endblock %}
+{% extends "base.html" %}
+{% block title %}Integrações · {{ app_name }}{% endblock %}
+{% block content %}
+<div class="page-heading" data-reveal="up">
+  <div><span class="eyebrow">Conexões oficiais</span><h1>Integrações</h1><p>Conecte seus canais com segurança. Tokens ficam criptografados e nunca retornam ao navegador.</p></div>
+</div>
+
+<div class="row g-4 stagger-grid" id="integrationCards">
+  {% for provider,icon,title,text in [('whatsapp','whatsapp','WhatsApp Business','Cloud API e templates aprovados'),('facebook','facebook','Facebook Pages','Publicações em páginas administradas'),('instagram','instagram','Instagram profissional','Contas comerciais ou de criador'),('ai','stars','Provedor de IA','Geração assistida com revisão humana')] %}
+    <div class="col-md-6" data-reveal="up">
+      <article class="panel integration-card interactive-card" data-provider="{{ provider }}">
+        <i class="bi bi-{{ icon }}" aria-hidden="true"></i>
+        <div><h2>{{ title }}</h2><p>{{ text }}</p><span class="badge text-bg-secondary integration-status">Não configurada</span></div>
+        <div class="integration-actions ms-auto">
+          <button class="btn btn-outline-primary configureIntegration" type="button" aria-label="Configurar {{ title }}"><i class="bi bi-gear" aria-hidden="true"></i> Configurar</button>
+          <button class="btn btn-light testIntegration d-none" type="button" aria-label="Testar conexão de {{ title }}"><i class="bi bi-wifi" aria-hidden="true"></i> Testar</button>
+          <button class="btn btn-light syncTemplates d-none" type="button" aria-label="Sincronizar templates de {{ title }}"><i class="bi bi-arrow-repeat" aria-hidden="true"></i> Templates</button>
+          <button class="btn btn-outline-danger removeIntegration d-none" type="button" aria-label="Remover integração {{ title }}"><i class="bi bi-trash" aria-hidden="true"></i><span class="visually-hidden"> Remover {{ title }}</span></button>
+        </div>
+      </article>
+    </div>
+  {% endfor %}
+</div>
+
+<div class="alert alert-warning mt-4" data-reveal="up"><i class="bi bi-exclamation-triangle me-2" aria-hidden="true"></i><strong>Importante:</strong> a ativação real depende de <code>EXTERNAL_SERVICES_ENABLED=true</code>, permissões, revisão do aplicativo, conta empresarial e tokens emitidos pela Meta. No WhatsApp, templates permanecem pendentes até confirmação oficial.</div>
+
+<div class="modal fade" id="integrationModal" tabindex="-1" aria-labelledby="integrationModalTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <form class="modal-content" id="integrationForm" novalidate>
+      <div class="modal-header"><div><h2 class="modal-title fs-5" id="integrationModalTitle">Configurar integração</h2><small>As credenciais são protegidas no servidor.</small></div><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button></div>
+      <div class="modal-body vstack gap-3">
+        <input type="hidden" name="provider">
+        <div><label class="form-label" for="integrationAccount">Identificador da conta, página ou número</label><input class="form-control" id="integrationAccount" name="external_account_id" autocomplete="off" placeholder="Identificador fornecido pelo canal"></div>
+        <div class="d-none" id="integrationBusinessAccountField"><label class="form-label" for="integrationBusinessAccount">ID da conta WhatsApp Business (WABA)</label><input class="form-control" id="integrationBusinessAccount" name="business_account_id" autocomplete="off" placeholder="Necessário para sincronizar templates" aria-describedby="integrationBusinessAccountHint"><small class="field-hint" id="integrationBusinessAccountHint">O ID do número envia mensagens; o ID WABA consulta a aprovação oficial dos templates.</small></div>
+        <div><label class="form-label" for="integrationToken">Token ou chave de acesso</label><input class="form-control" id="integrationToken" name="token" type="password" autocomplete="new-password" placeholder="Cole a credencial de acesso" aria-describedby="integrationTokenHint"><small class="field-hint" id="integrationTokenHint"><i class="bi bi-lock me-1" aria-hidden="true"></i>Será enviada uma vez, criptografada no servidor e nunca exibida novamente.</small></div>
+      </div>
+      <div class="modal-footer"><button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button><button class="btn btn-primary" type="submit"><i class="bi bi-shield-check" aria-hidden="true"></i> Salvar com segurança</button></div>
+    </form>
+  </div>
+</div>
+{% endblock %}

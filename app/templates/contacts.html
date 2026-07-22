@@ -1,6 +1,67 @@
-{% extends "base.html" %}{% block content %}<div class="page-heading"><div><span class="eyebrow">BASE AUTORIZADA</span><h1>Contatos</h1><p>Consentimento visível em cada registro.</p></div><button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#contactModal"><i class="bi bi-person-plus"></i> Novo contato</button></div>
-<div class="panel"><div class="toolbar"><input class="form-control" id="contactSearch" placeholder="Buscar nome, telefone ou e-mail"><label class="btn btn-outline-secondary mb-0">Importar CSV<input type="file" id="csvFile" accept=".csv" hidden></label><a class="btn btn-outline-secondary" href="/api/contacts/export/csv/all">Exportar</a><button class="btn btn-outline-primary" id="openListModal" type="button"><i class="bi bi-collection"></i> Criar lista</button></div><div class="table-responsive"><table class="table align-middle"><thead><tr><th><input class="form-check-input" type="checkbox" id="selectAllContacts" aria-label="Selecionar todos"></th><th>Contato</th><th>Telefone</th><th>Consentimentos</th><th>Status</th><th>Ações</th></tr></thead><tbody id="contactsTable"></tbody></table></div></div>
-<div class="panel mt-4"><div class="d-flex align-items-center justify-content-between"><h2 class="mb-0">Listas criadas</h2><span class="badge text-bg-light" id="contactListsCount">0 listas</span></div><div class="row g-3 mt-1" id="contactLists"><div class="text-muted">Carregando listas…</div></div></div>
-<div class="modal fade" id="contactModal" tabindex="-1"><div class="modal-dialog"><form class="modal-content" id="contactForm"><div class="modal-header"><h2 class="modal-title fs-5">Novo contato</h2><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body vstack gap-3"><input class="form-control" name="name" placeholder="Nome" required><input class="form-control" name="phone" placeholder="+55 11 99999-9999" required><input class="form-control" name="email" type="email" placeholder="E-mail (opcional)"><input class="form-control" name="source" placeholder="Origem do consentimento" required><div class="form-check"><input class="form-check-input" type="checkbox" name="whatsapp" id="waConsent"><label class="form-check-label" for="waConsent">Possui consentimento comprovável para WhatsApp</label></div></div><div class="modal-footer"><button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button><button class="btn btn-primary">Salvar</button></div></form></div></div>
-<div class="modal fade" id="listModal" tabindex="-1"><div class="modal-dialog modal-dialog-scrollable"><form class="modal-content" id="listForm"><div class="modal-header"><div><h2 class="modal-title fs-5">Criar lista de contatos</h2><small class="text-muted">Organize os contatos para usar nas campanhas.</small></div><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body vstack gap-3"><div><label class="form-label" for="listName">Nome da lista</label><input class="form-control" id="listName" name="name" maxlength="120" required placeholder="Ex.: Clientes com consentimento"></div><div><label class="form-label" for="listDescription">Descrição (opcional)</label><textarea class="form-control" id="listDescription" name="description" maxlength="255" rows="2"></textarea></div><div><div class="d-flex justify-content-between align-items-center mb-2"><label class="form-label mb-0">Contatos da lista</label><button class="btn btn-sm btn-link" type="button" id="toggleListContacts">Selecionar todos</button></div><div class="list-contact-options" id="listContactOptions"></div></div><div class="alert alert-danger d-none mb-0" id="listFormFeedback" role="alert"></div></div><div class="modal-footer"><button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button><button class="btn btn-primary" type="submit"><i class="bi bi-check2"></i> Criar lista</button></div></form></div></div>
+{% extends "base.html" %}
+{% block title %}Contatos · {{ app_name }}{% endblock %}
+{% block content %}
+<div class="page-heading" data-reveal="up">
+  <div><span class="eyebrow">Base autorizada</span><h1>Contatos</h1><p>Organize sua audiência e mantenha o consentimento visível em cada registro.</p></div>
+  <div class="page-heading-actions"><button class="btn btn-primary" id="newContactButton" type="button"><i class="bi bi-person-plus" aria-hidden="true"></i> Novo contato</button></div>
+</div>
+
+<section class="panel" data-reveal="up" aria-labelledby="contactsTitle">
+  <div class="panel-heading"><div><h2 id="contactsTitle">Base de contatos</h2><p>Busque, importe ou exporte registros da sua empresa.</p></div><span class="badge text-bg-light"><i class="bi bi-shield-check me-1"></i> Consentimento por canal</span></div>
+  <div class="toolbar">
+    <div class="search-field"><label class="form-label" for="contactSearch">Buscar contatos</label><div class="position-relative"><i class="bi bi-search" aria-hidden="true"></i><input class="form-control" id="contactSearch" type="search" placeholder="Nome, telefone ou e-mail" autocomplete="off"></div></div>
+    <button class="btn btn-outline-secondary" id="csvFileButton" type="button"><i class="bi bi-upload" aria-hidden="true"></i> Importar CSV</button><input class="visually-hidden" type="file" id="csvFile" accept=".csv,text/csv" tabindex="-1" aria-label="Selecionar arquivo CSV para importar">
+    <a class="btn btn-outline-secondary" href="/api/contacts/export/csv/all" download><i class="bi bi-download" aria-hidden="true"></i> Exportar</a>
+    <button class="btn btn-outline-primary" id="openListModal" type="button"><i class="bi bi-collection" aria-hidden="true"></i> Criar lista</button>
+  </div>
+  <div class="table-responsive">
+    <table class="table align-middle" aria-describedby="contactsTitle">
+      <thead><tr><th scope="col"><input class="form-check-input" type="checkbox" id="selectAllContacts" aria-label="Selecionar todos os contatos"></th><th scope="col">Contato</th><th scope="col">Telefone</th><th scope="col">Consentimentos</th><th scope="col">Status</th><th scope="col">Ações</th></tr></thead>
+      <tbody id="contactsTable" aria-live="polite"><tr><td colspan="6"><div class="empty-state compact"><span class="button-spinner" aria-hidden="true"></span><p class="mt-2">Carregando contatos…</p></div></td></tr></tbody>
+    </table>
+  </div>
+</section>
+
+<section class="panel mt-4" data-reveal="up" aria-labelledby="contactListsTitle">
+  <div class="panel-heading"><div><h2 id="contactListsTitle">Listas criadas</h2><p>Agrupe contatos para selecionar o público das campanhas.</p></div><span class="badge text-bg-light" id="contactListsCount">0 listas</span></div>
+  <div class="row g-3" id="contactLists" aria-live="polite"><div class="col-12"><div class="loading-card">Carregando listas…</div></div></div>
+</section>
+
+<div class="modal fade" id="contactModal" tabindex="-1" aria-labelledby="contactModalTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <form class="modal-content" id="contactForm" novalidate>
+      <input type="hidden" name="contact_id">
+      <div class="modal-header"><div><h2 class="modal-title fs-5" id="contactModalTitle">Novo contato</h2><small>Registre os dados e a origem do consentimento.</small></div><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button></div>
+      <div class="modal-body vstack gap-3">
+        <div><label class="form-label" for="contactName">Nome</label><input class="form-control" id="contactName" name="name" required autocomplete="name" placeholder="Nome completo"></div>
+        <div><label class="form-label" for="contactPhone">Telefone</label><input class="form-control" id="contactPhone" name="phone" type="tel" required autocomplete="tel" placeholder="+55 11 99999-9999"></div>
+        <div><label class="form-label" for="contactEmail">E-mail <span class="text-muted">(opcional)</span></label><input class="form-control" id="contactEmail" name="email" type="email" autocomplete="email" placeholder="contato@exemplo.com"></div>
+        <div><label class="form-label" for="contactSource">Origem do consentimento</label><input class="form-control" id="contactSource" name="source" required placeholder="Ex.: formulário do site" aria-describedby="contactSourceHint"><small class="field-hint" id="contactSourceHint">Informe onde e como a autorização foi obtida.</small></div>
+        <div><label class="form-label" for="contactTags">Etiquetas <span class="text-muted">(opcional)</span></label><input class="form-control" id="contactTags" name="tags" placeholder="cliente, evento, newsletter" aria-describedby="contactTagsHint"><small class="field-hint" id="contactTagsHint">Separe etiquetas por vírgulas.</small></div>
+        <fieldset class="vstack gap-2"><legend class="form-label mb-0">Consentimentos comprováveis</legend>
+          <div class="form-check"><input class="form-check-input consent-checkbox" type="checkbox" name="whatsapp" id="waConsent"><label class="form-check-label" for="waConsent">WhatsApp</label></div>
+          <div class="form-check"><input class="form-check-input consent-checkbox" type="checkbox" name="facebook" id="facebookConsent"><label class="form-check-label" for="facebookConsent">Facebook</label></div>
+          <div class="form-check"><input class="form-check-input consent-checkbox" type="checkbox" name="instagram" id="instagramConsent"><label class="form-check-label" for="instagramConsent">Instagram</label></div>
+        </fieldset>
+      </div>
+      <div class="modal-footer"><button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button><button class="btn btn-primary" type="submit"><i class="bi bi-check2" aria-hidden="true"></i> Salvar contato</button></div>
+    </form>
+  </div>
+</div>
+
+<div class="modal fade" id="listModal" tabindex="-1" aria-labelledby="listModalTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <form class="modal-content" id="listForm" novalidate>
+      <input type="hidden" name="list_id">
+      <div class="modal-header"><div><h2 class="modal-title fs-5" id="listModalTitle">Criar lista de contatos</h2><small>Organize os contatos para usar nas campanhas.</small></div><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button></div>
+      <div class="modal-body vstack gap-3">
+        <div><label class="form-label" for="listName">Nome da lista</label><input class="form-control" id="listName" name="name" maxlength="120" required placeholder="Ex.: Clientes com consentimento"></div>
+        <div><label class="form-label" for="listDescription">Descrição <span class="text-muted">(opcional)</span></label><textarea class="form-control" id="listDescription" name="description" maxlength="255" rows="2" placeholder="Explique a finalidade desta lista"></textarea></div>
+        <div><div class="d-flex justify-content-between align-items-center mb-2"><label class="form-label mb-0" id="listContactsLabel">Contatos da lista</label><button class="btn btn-sm btn-link" type="button" id="toggleListContacts">Selecionar todos</button></div><div class="list-contact-options" id="listContactOptions" role="group" aria-labelledby="listContactsLabel"></div></div>
+        <div class="alert alert-danger d-none mb-0" id="listFormFeedback" role="alert"></div>
+      </div>
+      <div class="modal-footer"><button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button><button class="btn btn-primary" type="submit"><i class="bi bi-check2" aria-hidden="true"></i> Criar lista</button></div>
+    </form>
+  </div>
+</div>
 {% endblock %}

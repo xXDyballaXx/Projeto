@@ -15,7 +15,7 @@ def check_company_limits(db: Session, company_id: int) -> tuple[bool, str | None
         .join(Campaign)
         .where(
             Campaign.company_id == company_id,
-            CampaignRecipient.status.in_(["sent", "delivered", "read"]),
+            CampaignRecipient.status.in_(["sending", "sent", "delivered", "read"]),
             CampaignRecipient.updated_at >= day_start,
         )
     ) or 0
@@ -25,7 +25,7 @@ def check_company_limits(db: Session, company_id: int) -> tuple[bool, str | None
     sent_last_hour = db.scalar(
         select(func.count(CampaignRecipient.id)).join(Campaign).where(
             Campaign.company_id == company_id,
-            CampaignRecipient.status.in_(["sent", "delivered", "read"]),
+            CampaignRecipient.status.in_(["sending", "sent", "delivered", "read"]),
             CampaignRecipient.updated_at >= now - timedelta(hours=1),
         )
     ) or 0
@@ -34,7 +34,7 @@ def check_company_limits(db: Session, company_id: int) -> tuple[bool, str | None
     sent_last_minute = db.scalar(
         select(func.count(CampaignRecipient.id)).join(Campaign).where(
             Campaign.company_id == company_id,
-            CampaignRecipient.status.in_(["sent", "delivered", "read"]),
+            CampaignRecipient.status.in_(["sending", "sent", "delivered", "read"]),
             CampaignRecipient.updated_at >= now - timedelta(minutes=1),
         )
     ) or 0

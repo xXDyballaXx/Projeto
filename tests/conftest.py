@@ -1,10 +1,25 @@
 import os
-from pathlib import Path
 
 os.environ["DATABASE_URL"] = "sqlite:///./test_divulgai.db"
 os.environ["ENVIRONMENT"] = "test"
+os.environ["DEBUG"] = "false"
+os.environ["CELERY_TASK_ALWAYS_EAGER"] = "true"
+os.environ["EXTERNAL_SERVICES_ENABLED"] = "false"
 os.environ["JWT_SECRET_KEY"] = "test-jwt-secret-with-enough-entropy"
 os.environ["SECRET_KEY"] = "test-secret-with-enough-entropy"
+for credential_name in (
+    "META_APP_ID",
+    "META_APP_SECRET",
+    "META_VERIFY_TOKEN",
+    "WHATSAPP_PHONE_NUMBER_ID",
+    "WHATSAPP_BUSINESS_ACCOUNT_ID",
+    "WHATSAPP_ACCESS_TOKEN",
+    "FACEBOOK_PAGE_ID",
+    "FACEBOOK_PAGE_ACCESS_TOKEN",
+    "INSTAGRAM_ACCOUNT_ID",
+    "AI_API_KEY",
+):
+    os.environ.pop(credential_name, None)
 
 import pytest
 from fastapi.testclient import TestClient

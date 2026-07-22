@@ -1,8 +1,10 @@
 from datetime import datetime, timedelta, timezone
+from uuid import uuid4
 
-from fastapi import Depends, HTTPException, Request, status
+from fastapi import Depends, HTTPException, Request, Response, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
-from jose import JWTError, jwt
+import jwt
+from jwt.exceptions import InvalidTokenError
 from passlib.context import CryptContext
 from sqlalchemy import select
 from sqlalchemy.orm import Session
@@ -15,6 +17,31 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 bearer = HTTPBearer(auto_error=False)
 
 
+def set_session_cookies(response: Response, request: Request, access_token: str, refresh_token: str) -> None:
+    secure = settings.environment == "production" or request.url.scheme == "https"
+    # Remove the legacy path-scoped cookie so browsers cannot send two values
+    # with the same name after upgrading an existing installation.
+    response.delete_cookie("refresh_token", path="/api/auth")
+    response.set_cookie(
+        "access_token",
+        access_token,
+        httponly=True,
+        secure=secure,
+        samesite="strict",
+        max_age=settings.access_token_minutes * 60,
+        path="/",
+    )
+    response.set_cookie(
+        "refresh_token",
+        refresh_token,
+        httponly=True,
+        secure=secure,
+        samesite="strict",
+        max_age=settings.refresh_token_days * 86400,
+        path="/",
+    )
+
+
 def hash_password(password: str) -> str:
     return pwd_context.hash(password)
 
@@ -24,19 +51,29 @@ def verify_password(password: str, hashed: str) -> bool:
 
 
 def create_token(user: User, token_type: str = "access") -> str:
-    expires = datetime.now(timezone.utc) + (
+    issued_at = datetime.now(timezone.utc)
+    expires = issued_at + (
         timedelta(minutes=settings.access_token_minutes)
         if token_type == "access"
         else timedelta(days=settings.refresh_token_days)
     )
-    payload = {"sub": str(user.id), "company_id": user.company_id, "role": user.role.value, "type": token_type, "exp": expires}
+    payload = {
+        "sub": str(user.id),
+        "company_id": user.company_id,
+        "role": user.role.value,
+        "ver": user.token_version,
+        "type": token_type,
+        "iat": issued_at,
+        "jti": uuid4().hex,
+        "exp": expires,
+    }
     return jwt.encode(payload, settings.jwt_secret_key, algorithm="HS256")
 
 
 def decode_token(token: str, expected_type: str = "access") -> dict:
     try:
         payload = jwt.decode(token, settings.jwt_secret_key, algorithms=["HS256"])
-    except JWTError as exc:
+    except InvalidTokenError as exc:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Sessão inválida ou expirada.") from exc
     if payload.get("type") != expected_type:
         raise HTTPException(status_code=401, detail="Tipo de token inválido.")
@@ -52,9 +89,15 @@ def get_current_user(
     if not token:
         raise HTTPException(status_code=401, detail="Autenticação necessária.")
     payload = decode_token(token)
-    user = db.scalar(select(User).where(User.id == int(payload["sub"]), User.is_active.is_(True)))
+    try:
+        user_id = int(payload["sub"])
+    except (KeyError, TypeError, ValueError) as exc:
+        raise HTTPException(status_code=401, detail="Sessão inválida ou expirada.") from exc
+    user = db.scalar(select(User).where(User.id == user_id, User.is_active.is_(True)))
     if not user:
         raise HTTPException(status_code=401, detail="Usuário não encontrado ou inativo.")
+    if payload.get("ver") != user.token_version:
+        raise HTTPException(status_code=401, detail="Sessão revogada. Entre novamente.")
     return user
 
 

@@ -1,30 +1,29 @@
-.list-contact-options {
-  max-height: 260px;
-  overflow-y: auto;
-  border: 1px solid var(--border);
-  border-radius: .7rem;
-  background: var(--soft);
-}
+.list-contact-options { max-height: 300px; overflow-y: auto; background: var(--bg-input); border: 1px solid var(--border-color); border-radius: 11px; }
 
 .list-contact-option {
   display: flex;
   align-items: center;
-  gap: .75rem;
-  padding: .75rem .9rem;
-  border-bottom: 1px solid var(--border);
+  gap: 0.75rem;
+  min-height: 58px;
+  padding: 0.75rem 0.9rem;
+  border-bottom: 1px solid var(--border-color);
   cursor: pointer;
+  transition: background var(--transition-fast);
 }
 
 .list-contact-option:last-child { border-bottom: 0; }
-.list-contact-option:hover { background: #fff; }
+.list-contact-option:hover { background: rgba(91, 108, 255, 0.07); }
 
 .list-card {
   height: 100%;
   padding: 1rem;
-  border: 1px solid var(--border);
-  border-radius: .85rem;
-  background: var(--soft);
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  transition: border-color var(--transition-fast), transform var(--transition-fast), background var(--transition-fast);
 }
 
+.list-card:hover { background: rgba(91, 108, 255, 0.055); border-color: rgba(91, 108, 255, 0.3); transform: translateY(-2px); }
+
 .list-card strong { display: block; }
-.list-card small { color: var(--muted); }
+.list-card small { color: var(--text-secondary); }

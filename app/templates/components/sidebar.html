@@ -1,0 +1,53 @@
+<aside class="sidebar" id="sidebar" aria-label="Navegação principal">
+  <div class="sidebar-header">
+    <a class="brand brand-light" href="/dashboard" aria-label="Divulgaí IA — Painel">
+      <span class="brand-mark" aria-hidden="true"><i class="bi bi-stars"></i></span>
+      <span class="brand-copy">Divulgaí <b>IA</b></span>
+    </a>
+    <button class="icon-button sidebar-collapse" id="sidebarCollapse" type="button" aria-label="Recolher menu" aria-controls="sidebar" aria-expanded="true">
+      <i class="bi bi-layout-sidebar-inset" aria-hidden="true"></i>
+    </button>
+  </div>
+
+  <nav class="sidebar-nav">
+    <span class="nav-section-label">Workspace</span>
+    <a class="nav-link {% if page == 'dashboard' %}active{% endif %}" href="/dashboard" aria-label="Painel" {% if page == 'dashboard' %}aria-current="page"{% endif %}>
+      <i class="bi bi-grid-1x2" aria-hidden="true"></i><span>Painel</span>
+    </a>
+    <a class="nav-link {% if page == 'contacts' %}active{% endif %}" href="/contatos" aria-label="Contatos" {% if page == 'contacts' %}aria-current="page"{% endif %}>
+      <i class="bi bi-people" aria-hidden="true"></i><span>Contatos</span>
+    </a>
+    <a class="nav-link {% if page == 'campaigns' %}active{% endif %}" href="/campanhas" aria-label="Campanhas" {% if page == 'campaigns' %}aria-current="page"{% endif %}>
+      <i class="bi bi-megaphone" aria-hidden="true"></i><span>Campanhas</span>
+    </a>
+    <a class="nav-link {% if page == 'content' %}active{% endif %}" href="/conteudo-ia" aria-label="Conteúdo com IA" {% if page == 'content' %}aria-current="page"{% endif %}>
+      <i class="bi bi-stars" aria-hidden="true"></i><span>Conteúdo com IA</span>
+    </a>
+
+    <span class="nav-section-label">Operação</span>
+    <a class="nav-link {% if page == 'history' %}active{% endif %}" href="/historico" aria-label="Histórico" {% if page == 'history' %}aria-current="page"{% endif %}>
+      <i class="bi bi-clock-history" aria-hidden="true"></i><span>Histórico</span>
+    </a>
+    <a class="nav-link {% if page == 'integrations' %}active{% endif %}" href="/integracoes" aria-label="Integrações" {% if page == 'integrations' %}aria-current="page"{% endif %}>
+      <i class="bi bi-plug" aria-hidden="true"></i><span>Integrações</span>
+    </a>
+    <a class="nav-link {% if page == 'settings' %}active{% endif %}" href="/configuracoes" aria-label="Configurações" {% if page == 'settings' %}aria-current="page"{% endif %}>
+      <i class="bi bi-sliders" aria-hidden="true"></i><span>Configurações</span>
+    </a>
+    {% if is_admin %}
+      <a class="nav-link {% if page == 'admin' %}active{% endif %}" href="/administracao" aria-label="Administração" {% if page == 'admin' %}aria-current="page"{% endif %}>
+        <i class="bi bi-shield-lock" aria-hidden="true"></i><span>Administração</span>
+      </a>
+    {% endif %}
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="sidebar-profile">
+      <span class="profile-avatar" aria-hidden="true"><i class="bi bi-person"></i></span>
+      <span class="profile-copy"><strong>{{ current_user.name }}</strong><small>{{ current_company.name }}</small></span>
+    </div>
+    <button class="nav-link logout-button" id="logout" type="button" aria-label="Sair da conta">
+      <i class="bi bi-box-arrow-left" aria-hidden="true"></i><span>Sair</span>
+    </button>
+  </div>
+</aside>

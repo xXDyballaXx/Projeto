@@ -1,1 +1,51 @@
-{% extends "base.html" %}{% block content %}<div class="page-heading"><div><span class="eyebrow">GOVERNANÇA</span><h1>Administração</h1><p>Visão global restrita ao perfil administrador.</p></div></div><div id="adminOverview" class="row g-3"><div class="loading-card">Verificando permissão…</div></div><div class="panel mt-4"><h2>Auditoria recente</h2><div id="adminLogs" class="table-responsive"></div></div>{% endblock %}
+{% extends "base.html" %}
+{% block title %}Administração · {{ app_name }}{% endblock %}
+{% block content %}
+<div class="page-heading" data-reveal="up">
+  <div><span class="eyebrow">Governança</span><h1>Administração</h1><p>Visão global restrita ao perfil administrador.</p></div>
+</div>
+<div class="admin-security-note mb-4" data-reveal="up"><i class="bi bi-shield-lock" aria-hidden="true"></i><div><strong>Ambiente restrito</strong><p class="mb-0">Indicadores e logs são exibidos somente após a validação das suas permissões.</p></div></div>
+<section aria-label="Indicadores administrativos">
+  <div id="adminOverview" class="row g-3 stagger-grid" aria-live="polite" aria-busy="true"><div class="col-12"><div class="loading-card">Verificando permissão…</div></div></div>
+</section>
+<section class="panel mt-4" data-reveal="up" aria-labelledby="adminLogsTitle">
+  <div class="panel-heading"><div><h2 id="adminLogsTitle">Auditoria recente</h2><p>Ações mais recentes registradas na plataforma.</p></div><i class="bi bi-journal-check text-secondary" aria-hidden="true"></i></div>
+  <div id="adminLogs" class="table-responsive" aria-live="polite"><div class="loading-card">Carregando registros…</div></div>
+  <nav id="adminLogsPagination" class="pagination-actions mt-3" aria-label="Paginar registros de auditoria"></nav>
+</section>
+
+<div class="row g-4 mt-1">
+  <div class="col-12 col-xl-6">
+    <section class="panel h-100" data-reveal="up" aria-labelledby="adminUsersTitle">
+      <div class="panel-heading">
+        <div><h2 id="adminUsersTitle">Usuários</h2><p>Consulte e bloqueie acessos sem excluir o histórico.</p></div>
+        <label class="visually-hidden" for="adminUserSearch">Buscar usuário</label>
+        <input class="form-control form-control-sm admin-search" id="adminUserSearch" type="search" placeholder="Buscar usuário" autocomplete="off">
+      </div>
+      <div id="adminUsers" class="table-responsive" aria-live="polite"><div class="loading-card">Carregando usuários…</div></div>
+      <nav id="adminUsersPagination" class="pagination-actions mt-3" aria-label="Paginar usuários"></nav>
+    </section>
+  </div>
+  <div class="col-12 col-xl-6">
+    <section class="panel h-100" data-reveal="up" aria-labelledby="adminCompaniesTitle">
+      <div class="panel-heading"><div><h2 id="adminCompaniesTitle">Empresas e limites</h2><p>Volume diário configurado por organização.</p></div><i class="bi bi-buildings text-secondary" aria-hidden="true"></i></div>
+      <div id="adminCompanies" class="table-responsive" aria-live="polite"><div class="loading-card">Carregando empresas…</div></div>
+      <nav id="adminCompaniesPagination" class="pagination-actions mt-3" aria-label="Paginar empresas"></nav>
+    </section>
+  </div>
+  <div class="col-12 col-xl-7">
+    <section class="panel h-100" data-reveal="up" aria-labelledby="adminCampaignsTitle">
+      <div class="panel-heading"><div><h2 id="adminCampaignsTitle">Campanhas</h2><p>Status reais de processamento em todas as empresas.</p></div><i class="bi bi-megaphone text-secondary" aria-hidden="true"></i></div>
+      <div id="adminCampaigns" class="table-responsive" aria-live="polite"><div class="loading-card">Carregando campanhas…</div></div>
+      <nav id="adminCampaignsPagination" class="pagination-actions mt-3" aria-label="Paginar campanhas"></nav>
+    </section>
+  </div>
+  <div class="col-12 col-xl-5">
+    <section class="panel h-100" data-reveal="up" aria-labelledby="adminErrorsTitle">
+      <div class="panel-heading"><div><h2 id="adminErrorsTitle">Erros de integração</h2><p>Última falha segura registrada por canal.</p></div><i class="bi bi-exclamation-triangle text-secondary" aria-hidden="true"></i></div>
+      <div id="adminErrors" class="table-responsive" aria-live="polite"><div class="loading-card">Carregando erros…</div></div>
+      <nav id="adminErrorsPagination" class="pagination-actions mt-3" aria-label="Paginar erros de integração"></nav>
+    </section>
+  </div>
+</div>
+{% endblock %}

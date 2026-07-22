@@ -1,2 +1,36 @@
-{% extends "base.html" %}{% block content %}<div class="page-heading"><div><span class="eyebrow">RASTREABILIDADE</span><h1>Histórico</h1><p>Envios, publicações, falhas e cancelamentos.</p></div></div><div class="panel"><div class="table-responsive"><table class="table"><thead><tr><th>Campanha</th><th>Canal</th><th>Data</th><th>Destinatários</th><th>Enviados</th><th>Falhas</th><th>Status</th></tr></thead><tbody id="historyTable"></tbody></table></div></div>{% endblock %}
+{% extends "base.html" %}
+{% block title %}Histórico · {{ app_name }}{% endblock %}
+{% block content %}
+<div class="page-heading" data-reveal="up">
+  <div><span class="eyebrow">Rastreabilidade</span><h1>Histórico</h1><p>Consulte envios, publicações, falhas e cancelamentos em um só lugar.</p></div>
+  <div class="page-heading-actions"><a class="btn btn-outline-secondary" href="/campanhas"><i class="bi bi-megaphone" aria-hidden="true"></i> Ver campanhas</a></div>
+</div>
+<section class="panel" data-reveal="up" aria-labelledby="historyTitle">
+  <div class="panel-heading"><div><h2 id="historyTitle">Registro de campanhas</h2><p>Os dados abaixo refletem o processamento real da sua conta.</p></div><span class="badge text-bg-light"><i class="bi bi-clock-history me-1"></i> Auditoria</span></div>
+  <form class="filter-bar mb-3" id="historyFilters" role="search">
+    <div><label class="visually-hidden" for="historySearch">Buscar campanha</label><input class="form-control" id="historySearch" name="q" type="search" placeholder="Buscar campanha" autocomplete="off"></div>
+    <div><label class="visually-hidden" for="historyChannel">Filtrar por canal</label><select class="form-select" id="historyChannel" name="channel"><option value="">Todos os canais</option><option value="whatsapp">WhatsApp</option><option value="facebook">Facebook</option><option value="instagram">Instagram</option></select></div>
+    <div><label class="visually-hidden" for="historyStatus">Filtrar por status</label><select class="form-select" id="historyStatus" name="status"><option value="">Todos os status</option><option value="sent">Concluída</option><option value="simulated">Simulada</option><option value="failed">Falhou</option><option value="cancelled">Cancelada</option></select></div>
+    <button class="btn btn-outline-primary" type="submit"><i class="bi bi-funnel" aria-hidden="true"></i> Filtrar</button>
+  </form>
+  <div class="table-responsive">
+    <table class="table" aria-describedby="historyTitle">
+      <thead><tr><th scope="col">Campanha</th><th scope="col">Canal</th><th scope="col">Data</th><th scope="col">Destinatários</th><th scope="col">Enviados</th><th scope="col">Falhas</th><th scope="col">Status</th><th scope="col">Detalhes</th></tr></thead>
+      <tbody id="historyTable" aria-live="polite"><tr><td colspan="8"><div class="empty-state compact"><span class="button-spinner" aria-hidden="true"></span><p class="mt-2">Carregando histórico…</p></div></td></tr></tbody>
+    </table>
+  </div>
+  <nav class="pagination-actions" aria-label="Paginação do histórico">
+    <button class="btn btn-sm btn-outline-secondary" id="historyPrevious" type="button" disabled><i class="bi bi-arrow-left" aria-hidden="true"></i> Anterior</button>
+    <span id="historyPage" aria-live="polite">Página 1</span>
+    <button class="btn btn-sm btn-outline-secondary" id="historyNext" type="button" disabled>Próxima <i class="bi bi-arrow-right" aria-hidden="true"></i></button>
+  </nav>
+</section>
 
+<div class="modal fade" id="historyDetailModal" tabindex="-1" aria-labelledby="historyDetailTitle" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable"><div class="modal-content">
+    <div class="modal-header"><div><span class="eyebrow">Registro processado</span><h2 class="modal-title" id="historyDetailTitle">Detalhes da campanha</h2></div><button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Fechar"></button></div>
+    <div class="modal-body" id="historyDetailBody"><div class="loading-card">Carregando detalhes…</div></div>
+    <div class="modal-footer"><button class="btn btn-outline-secondary" type="button" data-bs-dismiss="modal">Fechar</button></div>
+  </div></div>
+</div>
+{% endblock %}
